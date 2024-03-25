@@ -528,7 +528,8 @@
 ]
 
 // `pref` if to prefer the long form
-#let acro(short, pref: false, append: "") = {
+// may be normal, short or long
+#let acro(short, pref: "normal", append: "") = {
 	let item = acronyms.at(short)
 
 	locate(loc => {
@@ -536,7 +537,7 @@
 
 	// Already used once
 	if entries.len() > 0 {
-		if pref {
+		if pref == "long" {
 			link(label(short))[#item#append]
 		} else {
 			link(label(short))[#short#append]
@@ -544,10 +545,10 @@
 	// First usage
 	} else {
 		acroStates.update(e => {e.push(short); e;});
-		if pref {
-			link(label(short))[#item#append (#short)]
-		} else {
+		if pref == "short" {
 			link(label(short))[#short#append (#item)]
+		} else {
+			link(label(short))[#item#append (#short)]
 		}
 	}
 	});
