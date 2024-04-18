@@ -134,6 +134,10 @@
 	// You may use `.yml` for Hayagriva format
 	// or `.bib` for BibLaTeX format
 	bibliography_path: "literature.yml",
+	// Citation style:
+	// Customized includes ISBNs and
+	// writes DOI in capital letters
+	customized_ieee_citations: true,
 
 	// The contents of your abstract
 	abstract: include "./abstract.typ",
@@ -465,6 +469,9 @@
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
+	#bibliography(bibliography_path, title: selected_lang.bibliography,
+		style: if customized_ieee_citations {"/ieee-modified.csl"} else {"ieee"})
+
 	#if appendix != none [
 		#pagebreak(weak: true)
 		#heading(numbering: none, selected_lang.appendix)

@@ -37,18 +37,27 @@ you can supply it if it is not "Introduction" using the `first_chapter_title` pa
 
 As for bibliography / reference listing,
 you may decide whether to use "Hayagriva", a yaml-based format format designed for Typst
-or BibTeX (`.bib`) format, which is _well supported by other platforms
-and tooling_ since it is commonly used by LaTeX.
+or BibTeX (`.bib`) format, which is _well supported by other platforms and tooling_
+since it is commonly used by LaTeX.
+You may use the Zotero `zotero-better-bibtex` extension
+for automatic synchronization.
 To switch between bibliography formats, change the above to the following:
 
 #figure(```typ
   #show: thesis.with(
     ...
     bibliography_path = "literature.bib", // or literature.yml for Hayagriva
+    customized_ieee_citations = true, // default
   )
   ```, kind: "code", supplement: "Code example",
   caption: [Code example on how to use different bibliography formats with this template]
 )
+
+By default, this template displayes ISBNs in the Bibliography.
+If no DOI is known, the ISBN is shown instead, and as a fallback the URL if available.
+This deviates from the normal/usual IEEE citation style.
+Do disable this behaiviour and use the normal IEEE,
+set ```typ customized_ieee_citations = false```.
 
 == Proposed Structure
 
