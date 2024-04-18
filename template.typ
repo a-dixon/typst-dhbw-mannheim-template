@@ -32,6 +32,7 @@
 	list_of_figures: "List of Figures",
 	acronyms: "Acronyms",
 	bibliography: "Bibliography",
+	appendix: "Appendix",
 	chapter: "Chapter",
 	section: "Section",
 	confidentiality_clause: [
@@ -73,6 +74,7 @@
 	list_of_figures: "Abbildungsverzeichnis",
 	acronyms: "Abkürzungsverzeichnis",
 	bibliography: "Literaturverzeichnis",
+	appendix: "Anhang",
 	chapter: "Kapitel",
 	section: "Abschnitt",
 	confidentiality_clause: [
@@ -135,6 +137,8 @@
 
 	// The contents of your abstract
 	abstract: include "./abstract.typ",
+	// To be append after the bibliography
+	appendix: none,
 
 	// First chapter of your thesis
 	// This is required to generate the content section correctly
@@ -525,7 +529,20 @@
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
-	#bibliography(bibliography_path, title: selected_lang.bibliography, style: "ieee")
+	#if appendix != none [
+		#pagebreak(weak: true)
+		#heading(numbering: none, selected_lang.appendix)
+		#set heading(
+			outlined: true,
+			bookmarked: true,
+			numbering: (..nums) => {
+				let n = nums.pos()
+				n.remove(0)
+				return numbering("A.1", ..n)
+			}
+		)
+		#appendix
+	]
 ]
 
 // `pref` if to prefer the long form
