@@ -184,8 +184,8 @@
 
 	// suggested font and font size by the DHBW style guide
 	#set text(
-		font: "Linux Libertine", // Linux Biolinum O
-		// font: "Linux Biolinum O",
+		font: "Linux Libertine",
+		// font: "New Computer Modern Sans",
 		size: 12pt,
 		hyphenate: false,
 		lang: language,
@@ -229,7 +229,7 @@
 			  let here_abs = here().position().y
 				let here_rel = here_abs.abs / page.height
 
-				if  here_rel > heading_pagebreak_percentage {
+				if here_rel > heading_pagebreak_percentage {
 					// Write but hide to assess location correctly
 					// Hidden will not have any influence
 					// on the output besides correct calculation
@@ -248,41 +248,6 @@
 			#v(sizes.at(1))
 		]
 	}
-	// Alternative formating for headdings
-	// #show heading: it => {
-	//   v(1em)
-	//   if it.numbering != none {
-	//     grid(
-	//       columns: (auto, auto),
-	//       {
-	//         numbering(it.numbering, ..counter(heading).at(it.location()))
-	//         h(24pt / it.level)
-	//       },
-	//       it.body,
-	//     )
-	//   } else {
-	//     it.body
-	//   }
-	//   v(0.5em)
-	// }
-	// #show heading.where(level: 1): set text(size: 24pt)
-	// #show heading.where(level: 2): set text(size: 20pt)
-	// #show heading.where(level: 3): set text(size: 16pt)
-
-	// Style figure captions
-	// TODO: consider reenabling, broken
-	// #show figure : it => block(breakable: false)[
-	// 	#v(15pt, weak: true)
-	// 	#it.body
-	// 	#align(center)[
-	// 		// #v(.5em)
-	// 		#block(width: 80%, text(size: .9em)[
-	// 			#it.supplement #it.counter.display(it.numbering):
-	// 			#emph(it.caption.text)
-	// 		])
-	// 		#v(15pt)
-	// 	]
-	// ]
 
 	// rename level 1 headings to "Chapter", otherwise "Section"
 	#set ref(supplement: it => {
@@ -375,7 +340,10 @@
 
 	#heading(outlined: true, selected_lang.abstract)
 
-	#block(width: 70%)[#abstract]
+	#block(width: 80%)[
+		#set align(left)
+		#abstract
+	]
 
 	#pagebreak()
 
@@ -463,6 +431,18 @@
 	#set heading(numbering: "1.1")
 	#set page(numbering: "1 / 1")
 	#counter(page).update(1)
+
+	// Format code blocks
+	#show raw.where(block: true): set align(left)
+	#show raw.where(block: true): set par(justify: false)
+	#show raw.where(block: true): set text(size: 8pt)
+	#show raw.where(block: true): set block(
+	  radius: 2pt,
+	  inset: 12pt,
+	  width: 100%,
+	  stroke: luma(128),
+	  fill: luma(240),
+	)
 
 	// the actual chapters
 	#body
