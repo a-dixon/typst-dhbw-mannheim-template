@@ -165,6 +165,7 @@
 	#set document(
 		title: title,
 		author: author,
+		date: date,
 	)
 
 	#set page(
@@ -324,7 +325,7 @@
 	#text(16pt)[*#author*]
 	#v(16pt)
 
-	#text(14pt)[#date]
+	#text(14pt)[#date.display("[day].[month].[year]")]
 
 	#set align(bottom)
 
@@ -377,7 +378,7 @@
 	
 	#v(48pt)
 
-	#university.location, #date
+	#university.location, #date.display("[day].[month].[year]")
 	// #v(48pt)
 
 	#box(width: 196pt, height: 40pt)[

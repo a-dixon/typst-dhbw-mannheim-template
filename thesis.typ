@@ -6,7 +6,11 @@
   type: "TX000",
   student_id: "change-me",
   course: "TINF2XA",
-  date: "00.00.2024",
+  date: datetime(
+    year: 1984,
+    month: 10,
+    day: 10,
+  ),
   time_period: "01.01.2023 - 00.00.2024",
   confidentiality_clause: true,
   language: "en",
