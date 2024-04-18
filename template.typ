@@ -141,8 +141,8 @@
 	appendix: none,
 
 	// First chapter of your thesis
-	// This is required to generate the content section correctly
-	first_chapter_title: "Introduction",
+	// This is *not* required anymore
+	// first_chapter_title: none,
 
 	// Factor of page location when to pagebreak headings
 	// to avoid a heading without content on the same page.
@@ -404,103 +404,39 @@
 
 	#pagebreak()
 
-	= #selected_lang.contents
+	// = #selected_lang.contents
 
-	#locate(loc => {
-		let headings = query(heading, loc)
-		let before_content = true
-		let after_content = false
+	#set outline(
+		indent: n => {
+			// Max indent is 2
+			if n > 2 { n = 2 }
+			return n * 2em
+		},
+		fill: repeat(" . ")
+	)
+	#show outline.entry.where(level: 1): it => {
+		if it.element.func() != heading { return it }
+		show ".": ""
+		v(2pt)
+		strong(it)
+	}
 
-		for elem in headings {
-			// kind of hacky, we track whether the main document has started by looking for a chapter by name
-			if elem.body == [#first_chapter_title] {
-				before_content = false
-			}
-
-			// similarly, track the end of the main content by the position of the "Bibliography" chapter
-			if elem.body == [#selected_lang.bibliography] {
-				after_content = true
-			}
-
-			// page numbers of the main document are arabic, the first pages are roman
-			let index_fmt = if before_content {
-				"I"
-			} else {
-				"1"
-			}
-
-			let location = elem.location()
-			let page_index = counter(page).at(location).at(0)
-
-			let formatted_index = numbering(index_fmt, page_index)
-
-			// only the main content should be numbered
-			let formatted_name = if before_content or after_content {
-				elem.body
-			} else [
-				#numbering("1.1", ..counter(heading).at(location))
-				#h(4pt)
-				#elem.body
-			]
-
-			let is_chapter = elem.level == 1
-
-			// indent headings in the table of contents based on their level
-			let indent = if is_chapter {
-				0pt
-			} else if elem.level == 2 {
-				2em
-			} else {
-				4em
-			}
-
-			// non-chapter headings have their line filled with dots
-			let spacer = if is_chapter { " " } else { " . " }
-
-			// if elem.body != [#selected_lang.abstract] and elem.outlined != false {
-			if elem.outlined != false {
-				link(
-					location,
-					[
-						#h(indent)
-						// add extra spacing between chapters
-						#if is_chapter {v(1pt)}
-						// chapters are bold, sections are not
-						#if is_chapter [*#formatted_name*] else [#formatted_name]
-						#box(width: 1fr, repeat(spacer))
-						#h(8pt)
-						#if is_chapter [*#formatted_index*] else [#formatted_index] \
-					],
-				)
-			}
-		}
-	})
-
-	// #outline(target: heading.)
-
-	// #show outline.entry.where(
-	//   level: 1
-	// ): it => {
-	//   v(12pt, weak: true)
-	//   strong(it)
-	// }
-
-	// #outline(target: heading, depth: 3, indent: 2em, fill: repeat(" . "))
-
-	#pagebreak()
+	#outline(target: heading, depth: 2, title: selected_lang.contents)
 
 	// start adding headings to the outline after the table of contents
 	#set heading(outlined: true)
+
+	#pagebreak(weak: true)
+
+	= #selected_lang.list_of_figures
 
 	#show outline.entry: it => [
 		#v(12pt, weak: true) #it
 	]
 
-	// List of figures
-	= #selected_lang.list_of_figures
-	#outline(target: figure, title: none, fill: repeat(" . "))
+	#outline(target: figure, title: none)
 
-	#pagebreak()
+	#pagebreak(weak: true)
 
 	= #selected_lang.acronyms
 
