@@ -10,22 +10,17 @@
 	student_id_course: "Student ID, Course",
 	company: "Company",
 	supervisor: "Supervisor in the Company",
-	decleration: (type, title) => [
+	declaration: (type, title) => [
 		= Author's Declaration
 
-		Hereby I solemnly declare:
+		I hereby declare that this #type, titled
 
-		+ that this #type, titled #text(style: "italic")[#title] is entirely the product of my own scholarly work, unless otherwise indicated in the text or references, or acknowledged below;
+		#align(center)[
+			#text(style: "italic")[#title]
+		]
 
-		+ I have indicated the thoughts adopted directly or indirectly from other sources at the appropriate places within the document;
-
-		+ this #type has not been submitted either in whole or part, for a degree at this or any other university or institution;
-
-		+ I have not published this #type in the past;
-
-		// + the printed version is equivalent to the submitted one.
-
-		I am aware that a dishonest declaration will entail legal consequences.
+		is my own unaided work, unless otherwise indicated in the text or references, or acknowledged below.
+		I also certify that the submitted electronic version corresponds to the printed version.
 	],
 	abstract: "Abstract",
 	contents: "Contents",
@@ -53,18 +48,17 @@
 	student_id_course: "Matrikelnummer, Kurs",
 	company: "Ausbildungsfirma",
 	supervisor: "Betreuer",
-	decleration: (type, title) => [
+	declaration: (type, title) => [
 		== Erklärung
 
-		Ich erkläre hiermit ehrenwörtlich:
-		+ dass ich meine #type mit dem Thema #title ohne fremde Hilfe
-			angefertigt habe;
-		+ dass ich die Übernahme wörtlicher Zitate aus der Literatur sowie die Verwendung
-			der Gedanken anderer Autoren an den entsprechenden Stellen innerhalb der
-			Arbeit gekennzeichnet habe;
-		+ dass ich meine T1000 bei keiner anderen Prüfung vorgelegt habe;
-
-		Ich bin mir bewusst, dass eine falsche Erklärung rechtliche Folgen haben wird.
+		Ich versichere hiermit, dass ich meine #type mit dem Thema: 
+	
+		#align(center)[
+			#text(style: "italic")[#title]
+		]
+	
+		selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe. Ich versichere zudem, dass die eingereichte elektronische Fassung mit der gedruckten Fassung übereinstimmt.
+		#v(48pt)
 
 		#title
 		*a big & fat _TODO_!*
@@ -117,7 +111,7 @@
 	// Details on your university
 	university: (
 		name: "Cooperative State University Baden-Württemberg",
-		location: "Stuttgart",
+		location: "Mannheim",
 		image: "assets/dhbw.svg",
 	),
 
@@ -334,10 +328,6 @@
 		pagebreak(weak: true)
 	}
 
-	// render the abstract aligned to the center of the page
-	#set align(horizon)
-	#set align(center)
-
 	#heading(outlined: true, selected_lang.abstract)
 
 	#block(width: 80%)[
@@ -350,7 +340,7 @@
 	#set align(top)
 	#set align(start)
 
-	#(selected_lang.decleration)(type, title)
+	#(selected_lang.declaration)(type, title)
 	
 	#v(48pt)
 
@@ -429,7 +419,7 @@
 
 	// update heading and page numberings to begin the main part of the document
 	#set heading(numbering: "1.1")
-	#set page(numbering: "1 / 1")
+	#set page(numbering: "1")
 	#counter(page).update(1)
 
 	// Format code blocks
@@ -440,12 +430,17 @@
 	  radius: 2pt,
 	  inset: 12pt,
 	  width: 100%,
-	  stroke: luma(128),
+		// uncomment the following for a line around the code blocks
+	  // stroke: luma(128),
 	  fill: luma(240),
 	)
 
 	// the actual chapters
 	#body
+
+	// set page numbering to lowercase roman
+	#set page(numbering: "i")	
+	#counter(page).update(1)
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
