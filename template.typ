@@ -178,9 +178,9 @@
 
 	// suggested font and font size by the DHBW style guide
 	#set text(
-		font: "Linux Libertine",
+		font: "Noto Sans Arabic",
 		// font: "New Computer Modern Sans",
-		size: 12pt,
+		size: 14pt,
 		hyphenate: false,
 		lang: language,
 		ligatures: true,
@@ -425,7 +425,7 @@
 	// Format code blocks
 	#show raw.where(block: true): set align(left)
 	#show raw.where(block: true): set par(justify: false)
-	#show raw.where(block: true): set text(size: 8pt)
+	#show raw.where(block: true): set text(size: 10pt)
 	#show raw.where(block: true): set block(
 	  radius: 2pt,
 	  inset: 12pt,
