@@ -178,16 +178,16 @@
 
 	// suggested font and font size by the DHBW style guide
 	#set text(
-		font: "Noto Sans Arabic",
+		font: "Open Sans",
 		// font: "New Computer Modern Sans",
-		size: 14pt,
+		size: 12pt,
 		hyphenate: false,
 		lang: language,
 		ligatures: true,
 	)
 
 	#set par(
-		leading: 8pt, // 1.5x line spacing
+		leading: 12pt, // 1.5x line spacing
 		justify: true,
 		linebreaks: "optimized",
 	)
