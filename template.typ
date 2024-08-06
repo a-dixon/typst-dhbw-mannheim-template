@@ -425,12 +425,14 @@
 		..acroArr,
 	)
 
-	#pagebreak(weak: true)
-
+	// this will be used later to continue the Roman counter for pages where it left off
+	<roman_counter_preliminary_end>
 	// update heading and page numberings to begin the main part of the document
 	#set heading(numbering: "1.1")
 	#set page(numbering: "1 / 1")
 	#counter(page).update(1)
+
+	#pagebreak(weak: true)
 
 	// Format code blocks
 	#show raw.where(block: true): set align(left)
@@ -446,6 +448,12 @@
 
 	// the actual chapters
 	#body
+
+	#set page(numbering: "I")
+	// reset the page numberings to the value of the last page counted in Roman numerals
+	#context counter(page).update(
+	  counter(page).at(<roman_counter_preliminary_end>).first()
+	)
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
