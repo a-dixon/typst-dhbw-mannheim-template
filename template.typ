@@ -429,7 +429,17 @@
 	<roman_counter_preliminary_end>
 	// update heading and page numberings to begin the main part of the document
 	#set heading(numbering: "1.1")
-	#set page(numbering: "1 / 1")
+	#set page(
+		numbering: "1 / 1",
+		// manipulate the footer to display the correct total page count
+		// otherwise it would show the value of the very last, Roman-numbered page
+		footer: align(center, context numbering(
+			"1 / 1",
+			..counter(page).get(),
+			// get the last page counted with Arabic numbers
+			..counter(page).at(<arabic_counter_end>).map(i => i - 1))
+		)
+	)
 	#counter(page).update(1)
 
 	#pagebreak(weak: true)
@@ -449,11 +459,16 @@
 	// the actual chapters
 	#body
 
-	#set page(numbering: "I")
-	// reset the page numberings to the value of the last page counted in Roman numerals
-	#context counter(page).update(
-	  counter(page).at(<roman_counter_preliminary_end>).first()
+	// reset footer to how it looked before
+	#set page(numbering: "I", footer:
+		align(center, context numbering("I", ..counter(page).get()))
 	)
+	// reset the page numberings to the following value of the last page counted in Roman numerals
+	#context counter(page).update(
+	  counter(page).at(<roman_counter_preliminary_end>).first() + 1
+	)
+	// used to obtain the total page count of Arabic numbered pages
+	<arabic_counter_end> // Placing this above does not work
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
