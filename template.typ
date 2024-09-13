@@ -198,6 +198,9 @@
 		linebreaks: "optimized",
 	)
 
+	// do not justify inside of figures, incl. tables
+	#show figure: set par (justify: false)
+
 	#set figure(
 		numbering: "I"
 	)
