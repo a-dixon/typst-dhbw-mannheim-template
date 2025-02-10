@@ -178,7 +178,7 @@
 
 	// suggested font and font size by the DHBW style guide
 	#set text(
-		font: "Open Sans",
+		font: "Libertinus Serif",
 		// font: "New Computer Modern Sans",
 		size: 12pt,
 		hyphenate: false,
@@ -191,6 +191,9 @@
 		justify: true,
 		linebreaks: "optimized",
 	)
+
+	// do not justify inside of figures, incl. tables
+	#show figure: set par (justify: false)
 
 	#set figure(
 		numbering: "I"
@@ -415,12 +418,24 @@
 		..acroArr,
 	)
 
-	#pagebreak(weak: true)
-
+	// this will be used later to continue the Roman counter for pages where it left off
+	<roman_counter_preliminary_end>
 	// update heading and page numberings to begin the main part of the document
 	#set heading(numbering: "1.1")
-	#set page(numbering: "1")
+	#set page(
+		numbering: "1 / 1",
+		// manipulate the footer to display the correct total page count
+		// otherwise it would show the value of the very last, Roman-numbered page
+		footer: align(center, context numbering(
+			"1 / 1",
+			..counter(page).get(),
+			// get the last page counted with Arabic numbers
+			..counter(page).at(<arabic_counter_end>).map(i => i - 1))
+		)
+	)
 	#counter(page).update(1)
+
+	#pagebreak(weak: true)
 
 	// Format code blocks
 	#show raw.where(block: true): set align(left)
@@ -438,9 +453,16 @@
 	// the actual chapters
 	#body
 
-	// set page numbering to lowercase roman
-	#set page(numbering: "i")	
-	#counter(page).update(1)
+	// reset footer to how it looked before
+	#set page(numbering: "I", footer:
+		align(center, context numbering("I", ..counter(page).get()))
+	)
+	// reset the page numberings to the following value of the last page counted in Roman numerals
+	#context counter(page).update(
+	  counter(page).at(<roman_counter_preliminary_end>).first() + 1
+	)
+	// used to obtain the total page count of Arabic numbered pages
+	<arabic_counter_end> // Placing this above does not work
 
 	// finally, include the bibliography chapter at the end of the document
 	#pagebreak()
@@ -468,25 +490,25 @@
 #let acro(short, pref: "normal", append: "") = {
 	let item = acronyms.at(short)
 
-	locate(loc => {
-	let entries = acroStates.at(loc).filter(e => e == short);
+	context({
+		let entries = acroStates.at(here()).filter(e => e == short);
 
-	// Already used once
-	if entries.len() > 0 {
-		if pref == "long" {
-			link(label(short))[#item#append]
+		// Already used once
+		if entries.len() > 0 {
+			if pref == "long" {
+				link(label(short))[#item#append]
+			} else {
+				link(label(short))[#short#append]
+			}
+		// First usage
 		} else {
-			link(label(short))[#short#append]
+			acroStates.update(e => {e.push(short); e;});
+			if pref == "short" {
+				link(label(short))[#short#append (#item)]
+			} else {
+				link(label(short))[#item#append (#short)]
+			}
 		}
-	// First usage
-	} else {
-		acroStates.update(e => {e.push(short); e;});
-		if pref == "short" {
-			link(label(short))[#short#append (#item)]
-		} else {
-			link(label(short))[#item#append (#short)]
-		}
-	}
 	});
 }
 
