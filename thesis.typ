@@ -5,7 +5,6 @@
   author: "Your name",
   type: "TX000",
   student_id: "change-me",
-  course: "TINF2XA",
   date: datetime(
     year: 1984,
     month: 10,
